@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+    <body>
+        <h1 id="tit">test</h1>
+        <div>
+            <div>
+                <h2>Canal</h2>
+                <p>Descripción</p>
+            </div>
+        </div>
+        <script>
+            window.onload = function () {
+                document.getElementById("tit").innerText = "Proyecto " + new URLSearchParams().get("id") + " yayyy"
+            }
+        </script>
+    </body>
+</html>
