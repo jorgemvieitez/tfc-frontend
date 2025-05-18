@@ -13,7 +13,7 @@
         </div>
         <script>
             window.onload = function () {
-                document.getElementById("tit").innerText = "Proyecto " + new URLSearchParams().get("id") + " yayyy"
+                document.getElementById("tit").innerText = "Proyecto " + new URLSearchParams(document.location.search).get("id") + " yayyy"
             }
         </script>
     </body>

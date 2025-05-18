@@ -12,7 +12,19 @@
         </div>
         <script>
             function test(id) {
-                open("proyectos.html?id=" + id, "_this")
+                open("proyectos.html?id=" + id, "_self")
+            }
+
+            window.onload = async function populate() {
+                const response = await fetch("http://127.0.0.1:8080/project", {
+                    method: "GET",
+                    headers: {
+                        "Authentication": "5",
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                    mode: "cors "
+                })
+                console.log(response);
             }
         </script>
     </body>
