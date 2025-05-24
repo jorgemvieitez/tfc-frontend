@@ -22,7 +22,7 @@ def get_data(req):
         try:
             return (True, req.json())
         except:
-            return (True, this.text)
+            return (True, req.text)
     else:
         return (False, str(req.status_code) + " " + req.reason)
 
