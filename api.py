@@ -24,6 +24,6 @@ def get_data(req):
         except:
             return (True, this.text)
     else:
-        return (False, req.status_code)
+        return (False, str(req.status_code) + " " + req.reason)
 
 rq = lambda method, page, user=None, body={}: get_data(make_request(method, page, user, body))
