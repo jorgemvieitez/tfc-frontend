@@ -3,7 +3,7 @@ from tkinter import ttk
 
 import api
 from utils import *
-import proyectos
+from page import proyectos
 
 def window(user, project):
     (status1, info_proj) = api.rq("get", f"project/{project}", user)
