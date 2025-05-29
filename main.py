@@ -1,4 +1,5 @@
 from page import login, proyectos
 
 creds = login.window()
-proyectos.window(login.user)
+if hasattr(login, "user"):
+    proyectos.window(login.user)
