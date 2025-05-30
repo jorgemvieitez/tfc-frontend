@@ -22,6 +22,7 @@ def window(user, project):
         return
 
     root = tkinter.Tk()
+    do_style()
     frm = ttk.Frame(root)
     frm.grid()
     ttk.Label(frm, text=f"Proyecto: {info_proj['nombre']}").grid(column=0, row=0, columnspan=4)
@@ -32,11 +33,30 @@ def window(user, project):
         root.destroy()
         proyectos.window(user)
 
-    def boton_abrir(id):
-        def inner(): pass
+    def boton_borrar():
+        (status, datos) = api.rq("delete", f"project/{project}", user)
+        if status == False:
+            if datos == "401 Unauthorized":
+                popup("¡No tienes permisos para hacer esto!")
+            else:
+                popup(datos)
+                root.destroy()
+            return
+        (status, datos) = api.rq("get", "project", user)
+        if status == False:
+            popup(datos)
+            root.destroy()
+            return
+
+        root.destroy()
+        proyectos.window(user)
+    
+    def boton_borrar_miembro(id):
+        def inner():
+            
         return inner
 
-    row_c = 1
+    row_c = 2
     row_m = 2
 
     for c in canales:
@@ -46,7 +66,10 @@ def window(user, project):
         dat_frm.grid()
         ttk.Label(dat_frm, text=c["nombre"]).grid(column=0, row=0, padx=5, pady=5)
         ttk.Label(dat_frm, text=c["type"]).grid(column=0, row=1, padx=5, pady=(0, 5))
-        ttk.Button(dat_frm, command=boton_abrir(c["id"]), text="Abrir").grid(column=1, row=0, rowspan=2, pady=5, padx=(0, 5))
+        btn_abrir = ttk.Button(dat_frm, command=boton_abrir(c["id"]), text="Abrir")
+        btn_abrir.grid(column=1, row=0, rowspan=2, pady=5, padx=(0, 5))
+
+        btn_abrir["state"] = "disabled"
 
         row_c += 1
 
@@ -60,12 +83,20 @@ def window(user, project):
         ttk.Label(dat_frm, text=m_usr["nombre"]).grid(column=2, row=0, padx=5, pady=5)
         ttk.Label(dat_frm, text=m["permisos"]).grid(column=2, row=1, padx=5, pady=(0, 5))
 
+        clr_frm_usr = tkinter.Frame(dat_frm, borderwidth=1, bg="grey")
+        clr_frm_usr.grid(pady=5, padx=5, column=3, row=0, rowspan=2)
+        dat_frm_usr = tkinter.Frame(clr_frm_usr)
+        dat_frm_usr.grid()
+        tkinter.Button(dat_frm_usr, text="...").grid(column=0, row=0)
+        tkinter.Button(dat_frm_usr, text="X", command=boton_borrar_miembro).grid(column=1, row=0)
+
         row_m += 1
     
     row = max(row_c, row_m)
 
     ttk.Button(frm, text="Atrás", command=boton_atras).grid(column=0, row=row)
-    ttk.Button(frm, text="Ajustes").grid(column=1, row=row)
-    ttk.Button(frm, text="Salir").grid(column=2, row=row)
+    ttk.Button(frm, text="Nombre").grid(column=1, row=row)
+    ttk.Button(frm, text="+ Gente").grid(column=2, row=row)
+    ttk.Button(frm, text="Eliminar", style="Red.TButton", command=boton_borrar).grid(column=3, row=row)
     
     root.mainloop()

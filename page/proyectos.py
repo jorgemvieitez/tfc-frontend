@@ -20,28 +20,32 @@ def main_data(root, frm, user, datos):
         if status == False:
             popup(datos)
             root.destroy()
+            return
         (status, datos) = api.rq("get", "project", user)
         if status == False:
             popup(datos)
             root.destroy()
+            return
 
         frm.destroy()
         frm.__init__(root)
         main_data(root, frm, user, datos)
     
-    def boton_borrar(id):
+    def boton_salir(id):
         def inner():
-            (status, datos) = api.rq("delete", f"project/{id}", user)
+            (status, datos) = api.rq("delete", f"project/{id}/self", user)
             if status == False:
-                if datos == "401 Unauthorized":
-                    popup("¡No tienes permiso para hacer eso!")
+                if datos == "403 Forbidden":
+                    popup("No puede haber un proyecto sin administradores.\nElimina el proyecto o añade a otro admin.")
                 else:
                     popup(datos)
                     root.destroy()
+                    return
             (status, datos) = api.rq("get", "project", user)
             if status == False:
                 popup(datos)
                 root.destroy()
+                return
 
             frm.destroy()
             frm.__init__(root)
@@ -60,7 +64,7 @@ def main_data(root, frm, user, datos):
         dat_frm.grid()
         ttk.Label(dat_frm, text=d["nombre"]).grid(column=0, row=0, padx=5, pady=5)
         ttk.Button(dat_frm, command=boton_abrir(d["id"]), text="Abrir").grid(column=1, row=0, pady=5, padx=(0, 5))
-        tkinter.Button(dat_frm, text="X", command=boton_borrar(d["id"])).grid(column=2, row=0)
+        tkinter.Button(dat_frm, text="X", command=boton_salir(d["id"])).grid(column=2, row=0)
 
         row += 1
     

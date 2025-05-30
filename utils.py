@@ -33,3 +33,7 @@ def popup_ask_name(text):
     popup.wait_window()
 
     return name_var.get()
+
+def do_style():
+    style = ttk.Style()
+    style.configure("Red.TButton", foreground="red")
